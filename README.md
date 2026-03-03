@@ -2,6 +2,7 @@
 LD Score Regression Implementation
 
 CSE 284 Project, Winter 2026
+
 Galen Heuer and Samuel Wright
 
 LD Scores downloaded from 1000 Genomes: https://zenodo.org/records/10515792
