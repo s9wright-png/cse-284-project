@@ -44,3 +44,9 @@ Run the LD score regression function, specifying the 'L2' LD score and the 'nlog
 ld_score_regression(score_bins['L2'],score_bins['nlogp'],
                    94437,num_snp,'/out/path/ld_score_graph.pdf')
 ```
+
+# Next steps
+
+Run LD score regression function on simulated data for inflated p-values and traits with polygenic architectures.
+
+Additionally, benchmark performance of our function against LDSC tool.
