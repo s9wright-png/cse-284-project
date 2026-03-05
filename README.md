@@ -20,7 +20,7 @@ Load in the summary statistics as a Pandas dataframe:
 ```python
 import sys 
 
-alz = pd.read_csv('/Users/samuelwright/Documents/CSE 284/Kunkle_etal_Stage1_results.txt',sep=' ')
+alz = pd.read_csv('/path/to/pvalues/Kunkle_etal_Stage1_results.txt',sep=' ')
 ```
 
 Load in integrate_data and ld_score_regression function from the "ld_score_regression.py" file available in this repository:
