@@ -45,6 +45,9 @@ ld_score_regression(score_bins['L2'],score_bins['nlogp'],
                    94437,num_snp,'/out/path/ld_score_graph.pdf')
 ```
 
+<img width="584" height="455" alt="image" src="https://github.com/user-attachments/assets/c14fbe31-634d-49c1-993f-6e97786d3aef" />
+
+
 # Next steps
 
 Run LD score regression function on simulated data for inflated p-values and traits with polygenic architectures.
