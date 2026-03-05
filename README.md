@@ -53,11 +53,16 @@ ld_score_regression(score_bins['L2'],score_bins['nlogp'],
 
 <img width="584" height="455" alt="image" src="https://github.com/user-attachments/assets/c14fbe31-634d-49c1-993f-6e97786d3aef" />
 
-# Test on simulated data
+# Test on simulated data (TO BE FINALIZED)
 
 Run LD score regression function on simulated data to see if the tool can distinguish traits with inflated p-values vs. true polygenic architectures.
 
+Load the simulated data from /simulated_data in this repository:
+```python
+inflated = pd.read_csv('/cse-284-project/simulateddata/sim_inflated.tsv', sep='\t')
+polygenic = pd.read_csv('/cse-284-project/simulateddata/sim_polygenic.tsv', sep='\t')
 
+```
 
 # Next steps
 
