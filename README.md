@@ -23,11 +23,6 @@ import pandas as pd
 
 alz = pd.read_csv('/path/to/pvalues/Kunkle_etal_Stage1_results.txt', sep=' ')
 ```
-Alternatively, load a subset of the data from chromosome 22 from the /data folder in this repository:
-
-```python
-alz = pd.read_csv('/cse-284-project/data/kunkle_subset.tsv', sep='\t')
-```
 
 Load in integrate_data and ld_score_regression function from the "ld_score_regression.py" file available in this repository:
 
