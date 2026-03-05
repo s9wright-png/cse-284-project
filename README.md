@@ -11,16 +11,22 @@ GWAS on late-onset Alzheimer's (Kunkle et al., Nature Genetics 2019) to be used 
 
 # Example usage
 
-Download "Kunkle_etal_Stage1_results.txt" file from the link above for the GWAS summary statistics from the Kunkle et al. paper and read the data into a python notebook as a Pandas dataframe.
+Download the LD score file "1000G_Phase3_ldscores.tgz" from the /data folder in this repository.
 
-Download the LD score file "1000G_Phase3_ldscores.tgz" from the data folder in this repository.
+Download "Kunkle_etal_Stage1_results.txt" file from the link above for the GWAS summary statistics from the Kunkle et al. paper and read the data into a python notebook as a Pandas dataframe.
 
 Load in the summary statistics as a Pandas dataframe:
 
 ```python
-import sys 
+import sys
+import pandas as pd
 
-alz = pd.read_csv('/path/to/pvalues/Kunkle_etal_Stage1_results.txt',sep=' ')
+alz = pd.read_csv('/path/to/pvalues/Kunkle_etal_Stage1_results.txt', sep=' ')
+```
+Alternatively, load a subset of the data from chromosome 22 from the /data folder in this repository:
+
+```python
+alz = pd.read_csv('/cse-284-project/data/kunkle_subset.tsv', sep='\t')
 ```
 
 Load in integrate_data and ld_score_regression function from the "ld_score_regression.py" file available in this repository:
@@ -47,9 +53,12 @@ ld_score_regression(score_bins['L2'],score_bins['nlogp'],
 
 <img width="584" height="455" alt="image" src="https://github.com/user-attachments/assets/c14fbe31-634d-49c1-993f-6e97786d3aef" />
 
+# Test on simulated data
+
+Run LD score regression function on simulated data to see if the tool can distinguish traits with inflated p-values vs. true polygenic architectures.
+
+
 
 # Next steps
-
-Run LD score regression function on simulated data for inflated p-values and traits with polygenic architectures.
 
 Additionally, benchmark performance of our function against LDSC tool.
