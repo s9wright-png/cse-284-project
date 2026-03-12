@@ -48,16 +48,38 @@ ld_score_regression(score_bins['L2'],score_bins['chisq'],
 
 <img width="585" height="455" alt="image" src="https://github.com/user-attachments/assets/a9924e85-5286-47fe-8052-4bed85bb747d" />
 
-# Test on simulated data (TO BE FINALIZED)
+# Test on simulated data
 
-Run LD score regression function on simulated data to see if the tool can distinguish traits with inflated p-values vs. true polygenic architectures.
+To validate the tool’s ability to distinguish between true polygenic signals and population inflation (as per reviewer feedback), we use two simulated datasets generated from 1000 Genomes (Chromosome 22) genotypes.
 
-Load the simulated data from /simulated_data in this repository:
+### Execution
+
+Run the benchmarks by importing the module functions. This will generate regression plots and calculate the SNP-heritability ($h^2$) and the intercept-based bias ($a$).
+
 ```python
-inflated = pd.read_csv('/cse-284-project/simulated_data/sim_inflated.tsv', sep='\t')
-polygenic = pd.read_csv('/cse-284-project/simulated_data/sim_polygenic.tsv', sep='\t')
+from ld_score_regression import integrate_data, ld_score_regression
 
+# Scenario A: Polygenic Trait
+# Simulated with h2 = 0.5 using real LD structure
+df_poly, n_snps = integrate_data(pd.read_csv('simulated_data/sim_polygenic.tsv', sep='\t'), 
+                                 'CHR', 'SNP', 'Pvalue', 'simulated_data/sim_ldscores.txt')
+ld_score_regression(df_poly['L2'], df_poly['nlogp'], 2500, n_snps, 'plot_polygenic.png')
+
+# Scenario B: Inflated Trait
+# Simulated with h2 = 0 but injected p-value bias
+df_infl, n_snps = integrate_data(pd.read_csv('simulated_data/sim_inflated.tsv', sep='\t'), 
+                                 'CHR', 'SNP', 'Pvalue', 'simulated_data/sim_ldscores.txt')
+ld_score_regression(df_infl['L2'], df_infl['nlogp'], 2500, n_snps, 'plot_inflated.png')
 ```
+### Interpreting results
+
+Compare your generated plots and statistics against the table below. This validation confirms that the tool correctly attributes signal to either genetic architecture or confounding factors.
+
+| Metric | Polygenic Scenario | Inflated Scenario | Significance |
+| :--- | :--- | :--- | :--- |
+| **Slope ($h^2$)** | **High & Positive** | **Near Zero (Flat)** | A high slope indicates the tool successfully captured the simulated heritability ($h^2$). |
+| **Intercept ($a$)** | **$\approx 1/N$** | **Significantly $> 1/N$** | A high intercept relative to $1/N$ proves the tool identifies non-genetic bias (inflation). |
+| **Visual Trend** | Upward diagonal | Horizontal / Flat | Confirms whether the $-\log_{10}(P)$ values are correlated with LD scores. |
 
 # Next steps
 
