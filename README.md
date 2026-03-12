@@ -39,7 +39,7 @@ score_bins, num_snp = integrate_data(alz,'Chromosome','MarkerName','Pvalue',
                '/path/to/ldscore/folder/LDscore')
 ```
 
-Run the LD score regression function, specifying the 'L2' LD score and the 'chisq' columns of the score_bins dataframe obtained from the last step. Also specify the sample size of the GWAS (63,926 per Kunkle et al.), as well as the desired output path for the LD score regression figure, which reports the R<sup>2</sup>, a (contribution of confounding) and heritability.
+Run the LD score regression function, specifying the 'L2' LD score and the 'chisq' columns of the score_bins dataframe obtained from the last step. Also specify the sample size of the GWAS (63,926 per Kunkle et al.) and number of snps (11,480,632 in the original dataframe from Kunkle et al.), as well as the desired output path for the LD score regression figure, which reports the R<sup>2</sup>, a (contribution of confounding) and heritability.
 
 ```python
 ld_score_regression(score_bins['L2'],score_bins['chisq'],
