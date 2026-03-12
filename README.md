@@ -46,8 +46,7 @@ ld_score_regression(score_bins['L2'],score_bins['chisq'],
                    94437,num_snp,'/out/path/ld_score_graph.pdf')
 ```
 
-<img width="585" height="455" alt="image" src="https://github.com/user-attachments/assets/4165727b-9db3-43a8-b232-ffb1646c7d5e" />
-
+<img width="585" height="455" alt="image" src="https://github.com/user-attachments/assets/a9924e85-5286-47fe-8052-4bed85bb747d" />
 
 # Test on simulated data (TO BE FINALIZED)
 
