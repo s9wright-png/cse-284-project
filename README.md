@@ -54,8 +54,8 @@ Run LD score regression function on simulated data to see if the tool can distin
 
 Load the simulated data from /simulated_data in this repository:
 ```python
-inflated = pd.read_csv('/cse-284-project/simulateddata/sim_inflated.tsv', sep='\t')
-polygenic = pd.read_csv('/cse-284-project/simulateddata/sim_polygenic.tsv', sep='\t')
+inflated = pd.read_csv('/cse-284-project/simulated_data/sim_inflated.tsv', sep='\t')
+polygenic = pd.read_csv('/cse-284-project/simulated_data/sim_polygenic.tsv', sep='\t')
 
 ```
 
