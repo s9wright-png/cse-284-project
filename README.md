@@ -82,6 +82,65 @@ Compare your generated plots and statistics against the table below. This valida
 | **Intercept ($a$)** | **$\approx 1/N$** | **Significantly $> 1/N$** | A high intercept relative to $1/N$ proves the tool identifies non-genetic bias (inflation). |
 | **Visual Trend** | Upward diagonal | Horizontal / Flat | Confirms whether the $-\log_{10}(P)$ values are correlated with LD scores. |
 
-# Next steps
+# Benchmarking against SUMRHE
 
-Additionally, benchmark performance of our function against LDSC tool.
+To benchmark the performance of our tool, we tested the SUMRHE method which calculates partitioned heritability by performing LD score regression on unweighted and weighted LD scores. The Github for this tool (https://github.com/sriramlab/SUMRHE) provides example usage for this tool with toy datasets, including an LD score table with weighted and unweighted LD scores, so to compare performance with our tool, we tested the performance of each method on this dataset. The SUMRHE method calculated a heritability of 0.05908 using the unweighted LD scores and 0.21531 using the weighted LD scores, for a sum of 0.27439 for total heritability. To get this value for heritability we followed the tutorial specified in the README for this tool using the function:
+
+```python
+python3 ../src/sumrhe.py --pheno ./sim_50k_h2_0.25_p_0.01.sumstat \
+                  --ldscores ./double_uniform_10k_stoc_k100.gw.ldscore.gz \
+                  --annot ./double_uniform_0.2.txt \
+                  --verbose \
+                  --njack 1000
+```
+
+To implement this method on our tool, we downloaded the sim_50k_h2_0.25_p_0.01.sumstat and double_uniform_10k_stoc_k100.gw.ldscore.gz and read these into a python notebook. For our method to work properly, we need to use positive weights only for the statsmodels.api implementation of WLS, so we removed rows with negative LD scores from the simulated LD score data as well.
+
+```python
+sumstat = pd.read_csv("/Users/samuelwright/Downloads/sim_50k_h2_0.25_p_0.01.sumstat",sep=' ')
+
+ldscore_toy = pd.read_csv('/Users/samuelwright/Downloads/double_uniform_10k_stoc_k100.gw.ldscore',sep='\t')
+
+ldscore_toy = ldscore_toy[(ldscore_toy['L2_0'] > 0) & (ldscore_toy['L2_1'] > 0)]
+```
+This data was structured somewhat differently from the datasets we had built the tool around, necessitating some manual formatting of the data instead of using the integrate_data function. For example, instead of including a p-value column, this data included a Z score column, which we took the square of this column to obtain a chi-square score.
+
+```python
+sumstat.index = sumstat['SNP']
+
+ldscore_toy.index = ldscore_toy['SNP']
+
+combined = pd.concat([ldscore_toy[['SNP','L2_0','L2_1']],sumstat[['N','Z']]],axis=1).dropna()
+```
+
+We then make bins as in our implementation for the unweighted LD scores.
+
+```python
+combined['Score Bins_0'] = pd.qcut(combined['L2_0'], q=50, labels=False) + 1
+
+combined['L2'] = combined['L2_0']
+
+score_bins = combined[['L2','Z2','Score Bins_0']].groupby('Score Bins_0').mean()
+```
+
+We can then use our function for performing and plotting LD score regression, using the specified sample size in the SUMRHE Github.
+
+```python
+ld_score_regression(score_bins['L2'], score_bins['Z2'], 10000, len(combined),'/out/path/ld_score_graph.pdf')
+```
+
+Which results in a heritability of 0.1873.
+
+We repeat this process for the weighted LD scores.
+
+```python
+combined['Score Bins_1'] = pd.qcut(combined['L2_1'], q=50, labels=False) + 1
+
+combined['L2'] = combined['L2_1']
+
+score_bins = combined[['L2','Z2','Score Bins_1']].groupby('Score Bins_1').mean()
+
+ld_score_regression(score_bins['L2'], score_bins['Z2'], 10000, len(combined),'/out/path/ld_score_graph.pdf')
+```
+
+Which results in a heritability of 0.1203. While the heritabilities from the individual regressions on the weighted and unweighted LD scores were quite different from SUMRHE's implementation, it's notable that the sum of our heritabilities of 0.3076 is quite close to SUMRHE's sum of 0.27439. While this result may be incidental since our model has to remove negative LD scores to run properly as well as SUMRHE's likely more sophisticated method, it is interesting that the total heritabilities are similar, perhaps indicating that the core method is still capturing the modes variability we are hoping to.
